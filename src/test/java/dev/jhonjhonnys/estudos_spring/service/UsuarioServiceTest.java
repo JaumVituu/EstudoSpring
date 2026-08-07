@@ -2,6 +2,10 @@ package dev.jhonjhonnys.estudos_spring.service;
 
 import org.assertj.core.api.Assertions;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,6 +31,7 @@ public class UsuarioServiceTest {
     private UsuarioService service;
 
     @Test
+    @DisplayName("Deve cadastrar usuario com sucesso quando o e-mail nao estiver cadastrado")
     void deveCriarUsuarioComSucesso(){
         // Arrange (Dado que...)
         Usuario usuarioEntrada = new Usuario("John", "johnjhon@email.com");
@@ -43,5 +48,9 @@ public class UsuarioServiceTest {
                 .isNotNull()
                 .extracting("nome")
                 .isEqualTo("John");
+
+        //Verifica se os metodos do repository foram realmente chamados
+        verify(repository, times(1)).existsByEmail("johnjhon@email.com");
+        verify(repository, times(1)).save(usuarioEntrada);
     }
 }
