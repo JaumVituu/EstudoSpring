@@ -35,7 +35,9 @@ public class UsuarioServiceTest {
         Usuario resultado = service.cadastrar(usuarioEntrada);
 
         // Assert (Entao...)
-        Assertions.assertNotNull(resultado.getId());
-        Assertions.assertEquals("John", resultado.getNome());
+        assertThat(resultado)
+                .isNotNull()
+                .extracting(Usuario::getNome)
+                .isEqualTo("John");
     }
 }
