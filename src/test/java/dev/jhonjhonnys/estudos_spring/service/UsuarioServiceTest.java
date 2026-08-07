@@ -1,12 +1,16 @@
 package dev.jhonjhonnys.estudos_spring.service;
 
 import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import dev.jhonjhonnys.estudos_spring.model.Usuario;
+import dev.jhonjhonnys.estudos_spring.repository.UsuarioRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class UsuarioServiceTest {
@@ -25,11 +29,11 @@ public class UsuarioServiceTest {
     @Test
     void deveCriarUsuarioComSucesso(){
         // Arrange (Dado que...)
-        Usuario usuarioEntrada = new Usuario(null, "John", "johnjhon@email.com");
+        Usuario usuarioEntrada = new Usuario("John", "johnjhon@email.com");
         Usuario usuarioSalvo = new Usuario(1L, "John", "johnjhon@email.com");
 
-        Mockito.when(repository.existsByEmail("johnjhon@email.com").thenReturn(false));
-        Mockito.when(repository.save(usuarioEntrada).thenReturn(usuarioSalvo));
+        Mockito.when(repository.existsByEmail("johnjhon@email.com")).thenReturn(false);
+        Mockito.when(repository.save(usuarioEntrada)).thenReturn(usuarioSalvo);
     
         // Act (Quando...)
         Usuario resultado = service.cadastrar(usuarioEntrada);
@@ -37,7 +41,7 @@ public class UsuarioServiceTest {
         // Assert (Entao...)
         assertThat(resultado)
                 .isNotNull()
-                .extracting(Usuario::getNome)
+                .extracting("nome")
                 .isEqualTo("John");
     }
 }
