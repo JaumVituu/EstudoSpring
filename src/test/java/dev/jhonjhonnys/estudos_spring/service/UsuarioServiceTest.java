@@ -1,9 +1,10 @@
 package dev.jhonjhonnys.estudos_spring.service;
 
-import org.assertj.core.api.Assertions;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,5 +53,20 @@ public class UsuarioServiceTest {
         //Verifica se os metodos do repository foram realmente chamados
         verify(repository, times(1)).existsByEmail("johnjhon@email.com");
         verify(repository, times(1)).save(usuarioEntrada);
+    }
+
+    @Test
+    @DisplayName("deve lancar excecao ao tentar cadastrar usuario com e-mail existente")
+    void deveLancarExcecaoQuandoEmailJaExistir(){
+        //Arrange (dado que...)
+        Usuario usuarioExistente = new Usuario("John", "johnjhon@email.com");
+
+        //Act (Quando...)
+        when(repository.existsByEmail(usuarioExistente.getEmail())).thenReturn(true);
+        
+        //Assert (Entao...)
+        assertThatThrownBy(() -> service.cadastrar(usuarioExistente))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Email já cadastrado");
     }
 }
