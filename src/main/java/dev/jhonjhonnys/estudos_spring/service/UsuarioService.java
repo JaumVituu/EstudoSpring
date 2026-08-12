@@ -19,6 +19,6 @@ public class UsuarioService {
 
         Usuario novo = new Usuario(dto.nome(),dto.email());
         Usuario salvo = repository.save(novo);
-        return new UsuarioResponseDTO(salvo.getId(), salvo.getEmail(), salvo.getNome());
+        return new UsuarioResponseDTO(salvo.getId(), salvo.getNome(), salvo.getEmail());
     }
 }
