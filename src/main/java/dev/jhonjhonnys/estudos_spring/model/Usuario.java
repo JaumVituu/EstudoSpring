@@ -6,12 +6,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tb_usuarios")
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +26,5 @@ public class Usuario {
     public Usuario(String nome, String email){
         this.nome = nome;
         this.email = email;
-    }
-
-    public String getEmail(){
-        return email;
     }
 }
