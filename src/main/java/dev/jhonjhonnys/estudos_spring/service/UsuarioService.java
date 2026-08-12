@@ -4,6 +4,7 @@ import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioRequestDTO;
 import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioResponseDTO;
 import dev.jhonjhonnys.estudos_spring.model.Usuario;
 import dev.jhonjhonnys.estudos_spring.repository.UsuarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 public class UsuarioService {
     private final UsuarioRepository repository;
@@ -20,5 +21,9 @@ public class UsuarioService {
         Usuario novo = new Usuario(dto.nome(),dto.email());
         Usuario salvo = repository.save(novo);
         return new UsuarioResponseDTO(salvo.getId(), salvo.getNome(), salvo.getEmail());
+    }
+
+    public UsuarioResponseDTO buscarPorEmail(String email){
+        return repository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Usuario nao encontrado"));
     }
 }

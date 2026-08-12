@@ -7,6 +7,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +21,7 @@ import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioRequestDTO;
 import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioResponseDTO;
 import dev.jhonjhonnys.estudos_spring.model.Usuario;
 import dev.jhonjhonnys.estudos_spring.repository.UsuarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
 public class UsuarioServiceTest {
@@ -73,5 +76,39 @@ public class UsuarioServiceTest {
         assertThatThrownBy(() -> service.cadastrar(usuarioExistente))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("Email já cadastrado");
+    }
+
+    
+    @Test
+    @DisplayName("deve encontrar usuario existente por meio de e-mail")
+    void deveEncontrarPorEmail(){
+        //Arrange (dado que...)
+        String email = "johnjhon@email.com";
+        UsuarioResponseDTO saidaDTO = new UsuarioResponseDTO(1L, "John", "johnjhon@email.com");
+        Mockito.when(repository.findByEmail(email)).thenReturn(Optional.of(saidaDTO));
+        
+        //Act (quando...)
+        UsuarioResponseDTO response = service.buscarPorEmail(email);
+
+        //Assert (entao...)
+        assertThat(response).isNotNull();
+        assertThat(response.id()).isEqualTo(1L);
+        assertThat(response.nome()).isEqualTo("John");
+        assertThat(response.email()).isEqualTo("johnjhon@email.com");
+    }
+
+    @Test
+    @DisplayName("deve lancar excecao ao tentar buscar por um email inexistente")
+    void deveLancarExcecaoQuandoBuscaEmailInexistente(){
+        //Arrange (Dado que...)
+        String email = "johnjhon@email.com";
+
+        //Act (Quando...)
+        when(repository.findByEmail(email)).thenReturn(Optional.empty());
+
+        //Assert (Entao...)
+        assertThatThrownBy(() -> service.buscarPorEmail(email))
+            .isInstanceOf(EntityNotFoundException.class)
+            .hasMessage("Usuario nao encontrado");
     }
 }

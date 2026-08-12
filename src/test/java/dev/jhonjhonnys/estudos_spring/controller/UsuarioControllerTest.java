@@ -43,16 +43,16 @@ public class UsuarioControllerTest {
     private UsuarioService usuarioService;
 
     @Test
-    @DisplayName("Deve criar uwm usuário com sucesso e retornar status 201 Created")
+    @DisplayName("Deve criar um usuário com sucesso e retornar status 201 Created")
     void deveCriarUsuarioComSucesso() throws Exception{
         //Arrange (Dado que...)
         UsuarioRequestDTO request = new UsuarioRequestDTO("John", "johnjhon@email.com");
         UsuarioResponseDTO response = new UsuarioResponseDTO(1L, "John", "johnjhon@email.com");
         
-        //Assert (Quando...)
+        //Act (Quando...)
         when(usuarioService.cadastrar(any(UsuarioRequestDTO.class))).thenReturn(response);
 
-        //Act (Entao...)
+        //Assert (Entao...)
         mockMvc.perform(post("/usuarios")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))
@@ -62,5 +62,25 @@ public class UsuarioControllerTest {
                 .andExpect(jsonPath("$.nome").value("John"))
                 .andExpect(jsonPath("$.email").value("johnjhon@email.com"));
         verify(usuarioService).cadastrar(any(UsuarioRequestDTO.class));
+    }
+
+    @Test
+    @DisplayName("Deve buscar um usuário por email com sucesso e retornar status x")
+    void deveBuscarPorEmailComSucesso() throws Exception{
+        //Arrange (Dado que...)
+        String email = "johnjhon@email.com";
+        Usuario existente = new Usuario(1L, "John", "johnjhon@email.com");
+
+        //Act (Quando...)
+        when(usuarioService.buscarPorEmail(email)).thenReturn(new UsuarioResponseDTO(existente.getId(),existente.getNome(),existente.getEmail()));
+
+        //Assert
+        mockMvc.perform(get("/usuarios?email=johnjhon@email.com")
+                .with(csrf()))
+                .andExpect(status().isFound())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.nome").value("John"))
+                .andExpect(jsonPath("$.email").value("johnjhon@email.com"));
+        verify(usuarioService).buscarPorEmail(email);
     }
 }
