@@ -2,6 +2,8 @@ package dev.jhonjhonnys.estudos_spring.service;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioRequestDTO;
 import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioResponseDTO;
 import dev.jhonjhonnys.estudos_spring.exception.usuario.userMismatchException;
@@ -9,6 +11,7 @@ import dev.jhonjhonnys.estudos_spring.model.Usuario;
 import dev.jhonjhonnys.estudos_spring.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 
+@Service
 public class UsuarioService {
     private final UsuarioRepository repository;
 
