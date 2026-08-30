@@ -145,7 +145,7 @@ public class UsuarioServiceTest {
 
     @Test
     @DisplayName("deve editar nome e email do usuario")
-    void deveEditarNomeEEmail(){
+    void deveEditarUsuario(){
         Usuario existente = new Usuario(1L,"John", "johnjhon@email.com");
         Long id = 1L;
         String novoEmail = "jhonnys@email.com";
@@ -185,6 +185,94 @@ public class UsuarioServiceTest {
         when(repository.save(novo)).thenReturn(any(Usuario.class));
 
         assertThatThrownBy(() -> service.editar(id, novoNome, novoEmail))
+            .isInstanceOf(userMismatchException.class)
+            .hasMessage("Dados inseridos nao coincidem com usuario persistido");
+    }
+
+        @Test
+    @DisplayName("deve editar nome do usuario")
+    void deveEditarNome(){
+        Usuario existente = new Usuario(1L,"John", "johnjhon@email.com");
+        Long id = 1L;
+        String novoNome = "John Jhon";
+        Usuario alterado = new Usuario(id, novoNome, "johnjhon@email.com");
+        when(repository.findById(id)).thenReturn(Optional.of(existente));
+        when(repository.save(alterado)).thenReturn(alterado);
+
+        UsuarioResponseDTO response = service.editarNome(id, novoNome);
+
+        assertThat(response).isNotNull();
+        assertThat(response.id()).isEqualTo(alterado.getId());
+        assertThat(response.nome()).isEqualTo(alterado.getNome());
+        assertThat(response.email()).isEqualTo(alterado.getEmail());
+    }
+
+    @Test
+    @DisplayName("deve lancar excecao ao tentar editar nome de usuario inexistente via id")
+    void deveLancarExcecaoQuandoEditarNomeInexistente(){
+        Long id = 1L;
+        when(repository.findById(id)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.editarNome(id, null))
+            .isInstanceOf(EntityNotFoundException.class)
+            .hasMessage("Nenhum usuario encontrado com este Id");
+    }
+
+    @Test
+    @DisplayName("deve lancar excecao quando nao salvar alteracao de nome")
+    void deveLancarExcecaoQuandoNaoSalvarNome(){
+        String novoNome = "Jhonnys";
+        Long id = 1L;
+        Usuario antigo = new Usuario(id, "John", "johnjhon@email.com");
+        Usuario novo = new Usuario(id, novoNome, "johnjhon@email.com");
+        when(repository.findById(id)).thenReturn(Optional.of(antigo));
+        when(repository.save(novo)).thenReturn(any(Usuario.class));
+
+        assertThatThrownBy(() -> service.editar(id, novoNome, "johnjhon@email.com"))
+            .isInstanceOf(userMismatchException.class)
+            .hasMessage("Dados inseridos nao coincidem com usuario persistido");
+    }
+
+    @Test
+    @DisplayName("deve editar email do usuario")
+    void deveEditarEmail(){
+        Usuario existente = new Usuario(1L,"John", "johnjhon@email.com");
+        Long id = 1L;
+        String novoEmail = "jhonnys@email.com";
+        Usuario alterado = new Usuario(id, "John", novoEmail);
+        when(repository.findById(id)).thenReturn(Optional.of(existente));
+        when(repository.save(alterado)).thenReturn(alterado);
+
+        UsuarioResponseDTO response = service.editar(id, "John", novoEmail);
+
+        assertThat(response).isNotNull();
+        assertThat(response.id()).isEqualTo(alterado.getId());
+        assertThat(response.nome()).isEqualTo(alterado.getNome());
+        assertThat(response.email()).isEqualTo(alterado.getEmail());
+    }
+
+    @Test
+    @DisplayName("deve lancar excecao ao tentar editar email de usuario inexistente via id")
+    void deveLancarExcecaoQuandoEditarEmailInexistente(){
+        Long id = 1L;
+        when(repository.findById(id)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> service.editar(id, null, null))
+            .isInstanceOf(EntityNotFoundException.class)
+            .hasMessage("Nenhum usuario encontrado com este Id");
+    }
+
+        @Test
+    @DisplayName("deve lancar excecao quando nao salvar alteracao de email")
+    void deveLancarExcecaoQuandoNaoSalvarEmail(){
+        String novoEmail = "jhonnys@email.com";
+        Long id = 1L;
+        Usuario antigo = new Usuario(id, "John", "johnjhon@email.com");
+        Usuario novo = new Usuario(id, "John", novoEmail);
+        when(repository.findById(id)).thenReturn(Optional.of(antigo));
+        when(repository.save(novo)).thenReturn(any(Usuario.class));
+
+        assertThatThrownBy(() -> service.editar(id, "John", novoEmail))
             .isInstanceOf(userMismatchException.class)
             .hasMessage("Dados inseridos nao coincidem com usuario persistido");
     }

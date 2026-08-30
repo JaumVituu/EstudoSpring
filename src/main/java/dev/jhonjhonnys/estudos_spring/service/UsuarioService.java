@@ -51,4 +51,26 @@ public class UsuarioService {
         UsuarioResponseDTO resposta = new UsuarioResponseDTO(salvo.getId(),salvo.getNome(),salvo.getEmail());
         return resposta;
     }
+
+    public UsuarioResponseDTO editarNome(Long id, String novoNome) {
+        Usuario alterado = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nenhum usuario encontrado com este Id"));
+        alterado.setNome(novoNome);
+        Usuario salvo = repository.save(alterado);
+        if(!alterado.equals(salvo)){
+            throw new userMismatchException("Dados inseridos nao coincidem com usuario persistido");
+        }
+        UsuarioResponseDTO resposta = new UsuarioResponseDTO(salvo.getId(),salvo.getNome(),salvo.getEmail());
+        return resposta;
+    }
+
+    public UsuarioResponseDTO editarEmail(Long id, String novoEmail) {
+        Usuario alterado = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nenhum usuario encontrado com este Id"));
+        alterado.setEmail(novoEmail);
+        Usuario salvo = repository.save(alterado);
+        if(!alterado.equals(salvo)){
+            throw new userMismatchException("Dados inseridos nao coincidem com usuario persistido");
+        }
+        UsuarioResponseDTO resposta = new UsuarioResponseDTO(salvo.getId(),salvo.getNome(),salvo.getEmail());
+        return resposta;
+    }
 }
