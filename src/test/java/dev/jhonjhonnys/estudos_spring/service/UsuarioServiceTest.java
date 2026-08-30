@@ -154,7 +154,7 @@ public class UsuarioServiceTest {
         when(repository.findById(id)).thenReturn(Optional.of(existente));
         when(repository.save(alterado)).thenReturn(alterado);
 
-        UsuarioResponseDTO response = service.editarNomeEEmail(id, novoNome, novoEmail);
+        UsuarioResponseDTO response = service.editar(id, novoNome, novoEmail);
 
         assertThat(response).isNotNull();
         assertThat(response.id()).isEqualTo(alterado.getId());
@@ -168,7 +168,7 @@ public class UsuarioServiceTest {
         Long id = 1L;
         when(repository.findById(id)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> service.editarNomeEEmail(id, null, null))
+        assertThatThrownBy(() -> service.editar(id, null, null))
             .isInstanceOf(EntityNotFoundException.class)
             .hasMessage("Nenhum usuario encontrado com este Id");
     }
@@ -184,7 +184,7 @@ public class UsuarioServiceTest {
         when(repository.findById(id)).thenReturn(Optional.of(antigo));
         when(repository.save(novo)).thenReturn(any(Usuario.class));
 
-        assertThatThrownBy(() -> service.editarNomeEEmail(id, novoNome, novoEmail))
+        assertThatThrownBy(() -> service.editar(id, novoNome, novoEmail))
             .isInstanceOf(userMismatchException.class)
             .hasMessage("Dados inseridos nao coincidem com usuario persistido");
     }

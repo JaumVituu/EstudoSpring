@@ -40,7 +40,7 @@ public class UsuarioService {
         return new UsuarioResponseDTO (usuario.getId(),usuario.getNome(),usuario.getEmail());
     }
 
-    public UsuarioResponseDTO editarNomeEEmail(Long id, String novoNome, String novoEmail) {
+    public UsuarioResponseDTO editar(Long id, String novoNome, String novoEmail) {
         Usuario alterado = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nenhum usuario encontrado com este Id"));
         alterado.setNome(novoNome);
         alterado.setEmail(novoEmail);
