@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioRequestDTO;
 import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioResponseDTO;
+import dev.jhonjhonnys.estudos_spring.exception.usuario.consts.ExceptionConstants;
 
 @SpringBootTest()
 @Transactional
@@ -40,8 +41,9 @@ public class UsuarioIntegrationTest {
     void deveLancarExcecaoQuandoEmailJaExistir(){
         service.cadastrar(new UsuarioRequestDTO("John","johnjhon@email.com"));
         entityManager.flush();
-        assertThatThrownBy(() -> service.cadastrar(new UsuarioRequestDTO("Jhonnys", "johnjhon@email.com")))
+        UsuarioRequestDTO novo = new UsuarioRequestDTO("Jhonnys", "johnjhon@email.com");
+        assertThatThrownBy(() -> service.cadastrar(novo))
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Email já cadastrado");
+            .hasMessage(ExceptionConstants.EMAIL_JA_CADASTRADO);
     }
 }

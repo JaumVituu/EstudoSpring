@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioRequestDTO;
 import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioResponseDTO;
 import dev.jhonjhonnys.estudos_spring.exception.usuario.userMismatchException;
+import dev.jhonjhonnys.estudos_spring.exception.usuario.consts.ExceptionConstants;
 import dev.jhonjhonnys.estudos_spring.model.Usuario;
 import dev.jhonjhonnys.estudos_spring.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,7 +22,7 @@ public class UsuarioService {
 
     public UsuarioResponseDTO cadastrar(UsuarioRequestDTO dto){
         if (repository.existsByEmail(dto.email())){
-            throw new IllegalArgumentException("Email já cadastrado");
+            throw new IllegalArgumentException(ExceptionConstants.EMAIL_JA_CADASTRADO);
         }
 
         Usuario novo = new Usuario(dto.nome(),dto.email());
@@ -30,13 +31,13 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDTO buscarPorEmail(String email){
-        return repository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Usuario nao encontrado"));
+        return repository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException(ExceptionConstants.USUARIO_NAO_ENCONTRADO));
     }
 
     public UsuarioResponseDTO deletarPorId(Long id){
         Optional<Usuario> usuarioOpt = repository.findById(id);
         if(usuarioOpt.isEmpty()){
-            throw new EntityNotFoundException("Nenhum usuario encontrado com este Id");
+            throw new EntityNotFoundException(ExceptionConstants.USUARIO_NAO_ENCONTRADO);
         }
         Usuario usuario =  usuarioOpt.get();
         repository.deleteById(id);
@@ -44,34 +45,34 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDTO editar(Long id, String novoNome, String novoEmail) {
-        Usuario alterado = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nenhum usuario encontrado com este Id"));
+        Usuario alterado = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(ExceptionConstants.USUARIO_NAO_ENCONTRADO));
         alterado.setNome(novoNome);
         alterado.setEmail(novoEmail);
         Usuario salvo = repository.save(alterado);
         if(!alterado.equals(salvo)){
-            throw new userMismatchException("Dados inseridos nao coincidem com usuario persistido");
+            throw new userMismatchException(ExceptionConstants.DADOS_NAO_COINCIDEM);
         }
         UsuarioResponseDTO resposta = new UsuarioResponseDTO(salvo.getId(),salvo.getNome(),salvo.getEmail());
         return resposta;
     }
 
     public UsuarioResponseDTO editarNome(Long id, String novoNome) {
-        Usuario alterado = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nenhum usuario encontrado com este Id"));
+        Usuario alterado = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(ExceptionConstants.USUARIO_NAO_ENCONTRADO));
         alterado.setNome(novoNome);
         Usuario salvo = repository.save(alterado);
         if(!alterado.equals(salvo)){
-            throw new userMismatchException("Dados inseridos nao coincidem com usuario persistido");
+            throw new userMismatchException(ExceptionConstants.DADOS_NAO_COINCIDEM);
         }
         UsuarioResponseDTO resposta = new UsuarioResponseDTO(salvo.getId(),salvo.getNome(),salvo.getEmail());
         return resposta;
     }
 
     public UsuarioResponseDTO editarEmail(Long id, String novoEmail) {
-        Usuario alterado = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Nenhum usuario encontrado com este Id"));
+        Usuario alterado = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(ExceptionConstants.USUARIO_NAO_ENCONTRADO));
         alterado.setEmail(novoEmail);
         Usuario salvo = repository.save(alterado);
         if(!alterado.equals(salvo)){
-            throw new userMismatchException("Dados inseridos nao coincidem com usuario persistido");
+            throw new userMismatchException(ExceptionConstants.DADOS_NAO_COINCIDEM);
         }
         UsuarioResponseDTO resposta = new UsuarioResponseDTO(salvo.getId(),salvo.getNome(),salvo.getEmail());
         return resposta;

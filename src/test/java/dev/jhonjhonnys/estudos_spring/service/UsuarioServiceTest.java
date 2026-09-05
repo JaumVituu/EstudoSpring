@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioRequestDTO;
 import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioResponseDTO;
 import dev.jhonjhonnys.estudos_spring.exception.usuario.userMismatchException;
+import dev.jhonjhonnys.estudos_spring.exception.usuario.consts.ExceptionConstants;
 import dev.jhonjhonnys.estudos_spring.model.Usuario;
 import dev.jhonjhonnys.estudos_spring.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -79,7 +80,7 @@ public class UsuarioServiceTest {
         //Assert (Entao...)
         assertThatThrownBy(() -> service.cadastrar(usuarioExistente))
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("Email já cadastrado");
+            .hasMessage(ExceptionConstants.EMAIL_JA_CADASTRADO);
     }
 
     
@@ -111,7 +112,7 @@ public class UsuarioServiceTest {
         //Assert (Entao...)
         assertThatThrownBy(() -> service.buscarPorEmail(email))
             .isInstanceOf(EntityNotFoundException.class)
-            .hasMessage("Usuario nao encontrado");
+            .hasMessage(ExceptionConstants.USUARIO_NAO_ENCONTRADO);
     }
 
     @Test
@@ -140,7 +141,7 @@ public class UsuarioServiceTest {
         //Act e Assert (Quando e Entao)
         assertThatThrownBy(() -> service.deletarPorId(id))
             .isInstanceOf(EntityNotFoundException.class)
-            .hasMessage("Nenhum usuario encontrado com este Id");
+            .hasMessage(ExceptionConstants.USUARIO_NAO_ENCONTRADO);
     }
 
     @Test
@@ -170,7 +171,7 @@ public class UsuarioServiceTest {
 
         assertThatThrownBy(() -> service.editar(id, null, null))
             .isInstanceOf(EntityNotFoundException.class)
-            .hasMessage("Nenhum usuario encontrado com este Id");
+            .hasMessage(ExceptionConstants.USUARIO_NAO_ENCONTRADO);
     }
 
     @Test
@@ -186,7 +187,7 @@ public class UsuarioServiceTest {
 
         assertThatThrownBy(() -> service.editar(id, novoNome, novoEmail))
             .isInstanceOf(userMismatchException.class)
-            .hasMessage("Dados inseridos nao coincidem com usuario persistido");
+            .hasMessage(ExceptionConstants.DADOS_NAO_COINCIDEM);
     }
 
         @Test
@@ -215,7 +216,7 @@ public class UsuarioServiceTest {
 
         assertThatThrownBy(() -> service.editarNome(id, null))
             .isInstanceOf(EntityNotFoundException.class)
-            .hasMessage("Nenhum usuario encontrado com este Id");
+            .hasMessage(ExceptionConstants.USUARIO_NAO_ENCONTRADO);
     }
 
     @Test
@@ -230,7 +231,7 @@ public class UsuarioServiceTest {
 
         assertThatThrownBy(() -> service.editar(id, novoNome, "johnjhon@email.com"))
             .isInstanceOf(userMismatchException.class)
-            .hasMessage("Dados inseridos nao coincidem com usuario persistido");
+            .hasMessage(ExceptionConstants.DADOS_NAO_COINCIDEM);
     }
 
     @Test
@@ -259,7 +260,7 @@ public class UsuarioServiceTest {
 
         assertThatThrownBy(() -> service.editar(id, null, null))
             .isInstanceOf(EntityNotFoundException.class)
-            .hasMessage("Nenhum usuario encontrado com este Id");
+            .hasMessage(ExceptionConstants.USUARIO_NAO_ENCONTRADO);
     }
 
         @Test
@@ -274,6 +275,6 @@ public class UsuarioServiceTest {
 
         assertThatThrownBy(() -> service.editar(id, "John", novoEmail))
             .isInstanceOf(userMismatchException.class)
-            .hasMessage("Dados inseridos nao coincidem com usuario persistido");
+            .hasMessage(ExceptionConstants.DADOS_NAO_COINCIDEM);
     }
 }
