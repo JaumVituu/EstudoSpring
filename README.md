@@ -79,5 +79,7 @@ Compartilho o progresso deste repositório no meu **Linkedin**, que você pode c
 
 <br/>
 <p align="center">
-  <img src="https://sonarcloud.io/api/project_badges/quality_gate?project=JaumVituu_EstudoSpring"/>
+  <a href="https://sonarcloud.io/project/overview?id=JaumVituu_EstudoSpring">
+    <img src="https://sonarcloud.io/api/project_badges/quality_gate?project=JaumVituu_EstudoSpring"/>
+  </a>
 </p>
