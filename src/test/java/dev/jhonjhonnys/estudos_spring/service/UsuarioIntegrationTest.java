@@ -17,7 +17,7 @@ import dev.jhonjhonnys.estudos_spring.exception.usuario.consts.ExceptionConstant
 @SpringBootTest()
 @Transactional
 @ActiveProfiles("test") //Faz com que o spring leia o .properties no test/resources
-public class UsuarioIntegrationTest {
+class UsuarioIntegrationTest {
     @Autowired
     private EntityManager entityManager;
 

@@ -26,7 +26,7 @@ import dev.jhonjhonnys.estudos_spring.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
-public class UsuarioServiceTest {
+class UsuarioServiceTest {
     
     //MOCKS -> Criam instancias "falsas" de um objeto
     //INJECTMOCKS -> Sinaliza ao mockito a qual classe devem ser 

@@ -28,7 +28,7 @@ import tools.jackson.databind.ObjectMapper;
 // Testa camada Controller isoladamente do Model - View - Controller
 @WebMvcTest(UsuarioController.class)
 @WithMockUser // Simula um usuario autenticado
-public class UsuarioControllerTest {
+class UsuarioControllerTest {
 
     //Autowired automaticamente injeta dependencias
     // que tem anotacao bean
