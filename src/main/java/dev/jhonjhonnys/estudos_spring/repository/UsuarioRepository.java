@@ -11,6 +11,6 @@ import dev.jhonjhonnys.estudos_spring.model.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
     Optional<UsuarioResponseDTO> findByEmail (String email);
-    void deleteById(Long Id);
+    void deleteById(Long id);
     boolean existsByEmail(String email);
 }

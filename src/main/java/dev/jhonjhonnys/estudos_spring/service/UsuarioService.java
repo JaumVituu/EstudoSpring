@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioRequestDTO;
 import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioResponseDTO;
-import dev.jhonjhonnys.estudos_spring.exception.usuario.userMismatchException;
+import dev.jhonjhonnys.estudos_spring.exception.usuario.UserMismatchException;
 import dev.jhonjhonnys.estudos_spring.exception.usuario.consts.ExceptionConstants;
 import dev.jhonjhonnys.estudos_spring.model.Usuario;
 import dev.jhonjhonnys.estudos_spring.repository.UsuarioRepository;
@@ -50,10 +50,9 @@ public class UsuarioService {
         alterado.setEmail(novoEmail);
         Usuario salvo = repository.save(alterado);
         if(!alterado.equals(salvo)){
-            throw new userMismatchException(ExceptionConstants.DADOS_NAO_COINCIDEM);
+            throw new UserMismatchException(ExceptionConstants.DADOS_NAO_COINCIDEM);
         }
-        UsuarioResponseDTO resposta = new UsuarioResponseDTO(salvo.getId(),salvo.getNome(),salvo.getEmail());
-        return resposta;
+        return new UsuarioResponseDTO(salvo.getId(),salvo.getNome(),salvo.getEmail());
     }
 
     public UsuarioResponseDTO editarNome(Long id, String novoNome) {
@@ -61,10 +60,9 @@ public class UsuarioService {
         alterado.setNome(novoNome);
         Usuario salvo = repository.save(alterado);
         if(!alterado.equals(salvo)){
-            throw new userMismatchException(ExceptionConstants.DADOS_NAO_COINCIDEM);
+            throw new UserMismatchException(ExceptionConstants.DADOS_NAO_COINCIDEM);
         }
-        UsuarioResponseDTO resposta = new UsuarioResponseDTO(salvo.getId(),salvo.getNome(),salvo.getEmail());
-        return resposta;
+        return new UsuarioResponseDTO(salvo.getId(),salvo.getNome(),salvo.getEmail());
     }
 
     public UsuarioResponseDTO editarEmail(Long id, String novoEmail) {
@@ -72,9 +70,8 @@ public class UsuarioService {
         alterado.setEmail(novoEmail);
         Usuario salvo = repository.save(alterado);
         if(!alterado.equals(salvo)){
-            throw new userMismatchException(ExceptionConstants.DADOS_NAO_COINCIDEM);
+            throw new UserMismatchException(ExceptionConstants.DADOS_NAO_COINCIDEM);
         }
-        UsuarioResponseDTO resposta = new UsuarioResponseDTO(salvo.getId(),salvo.getNome(),salvo.getEmail());
-        return resposta;
+        return new UsuarioResponseDTO(salvo.getId(),salvo.getNome(),salvo.getEmail());
     }
 }

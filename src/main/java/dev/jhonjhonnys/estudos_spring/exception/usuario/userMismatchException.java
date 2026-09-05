@@ -1,7 +1,7 @@
 package dev.jhonjhonnys.estudos_spring.exception.usuario;
 
-public class userMismatchException extends RuntimeException{
-    public userMismatchException(String message){
+public class UserMismatchException extends RuntimeException{
+    public UserMismatchException(String message){
         super(message);
     }
 }

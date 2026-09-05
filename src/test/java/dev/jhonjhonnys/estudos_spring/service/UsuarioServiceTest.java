@@ -19,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioRequestDTO;
 import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioResponseDTO;
-import dev.jhonjhonnys.estudos_spring.exception.usuario.userMismatchException;
+import dev.jhonjhonnys.estudos_spring.exception.usuario.UserMismatchException;
 import dev.jhonjhonnys.estudos_spring.exception.usuario.consts.ExceptionConstants;
 import dev.jhonjhonnys.estudos_spring.model.Usuario;
 import dev.jhonjhonnys.estudos_spring.repository.UsuarioRepository;
@@ -53,8 +53,8 @@ class UsuarioServiceTest {
         UsuarioResponseDTO dtoSaida = new UsuarioResponseDTO(1L, "John", "johnjhon@email.com");
         Usuario usuarioSalvo = new Usuario(dtoSaida.id(),dtoSaida.nome(),dtoSaida.email());
 
-        Mockito.when(repository.existsByEmail("johnjhon@email.com")).thenReturn(false);
-        Mockito.when(repository.save(any(Usuario.class))).thenReturn(usuarioSalvo);
+        when(repository.existsByEmail("johnjhon@email.com")).thenReturn(false);
+        when(repository.save(any(Usuario.class))).thenReturn(usuarioSalvo);
     
         // Act (Quando...)
         UsuarioResponseDTO resultado = service.cadastrar(dtoEntrada);
@@ -90,7 +90,7 @@ class UsuarioServiceTest {
         //Arrange (dado que...)
         String email = "johnjhon@email.com";
         UsuarioResponseDTO saidaDTO = new UsuarioResponseDTO(1L, "John", "johnjhon@email.com");
-        Mockito.when(repository.findByEmail(email)).thenReturn(Optional.of(saidaDTO));
+        when(repository.findByEmail(email)).thenReturn(Optional.of(saidaDTO));
         
         //Act (quando...)
         UsuarioResponseDTO response = service.buscarPorEmail(email);
@@ -121,7 +121,7 @@ class UsuarioServiceTest {
         //Arrange (Dado que...)
         Long idUsuario = 1L;
         Usuario saida = new Usuario(idUsuario, "John", "johnjhon@email.com");
-        Mockito.when(repository.findById(idUsuario)).thenReturn(Optional.of(saida));
+        when(repository.findById(idUsuario)).thenReturn(Optional.of(saida));
 
         //Act (Quando...)
         UsuarioResponseDTO response = service.deletarPorId(idUsuario);
@@ -137,7 +137,7 @@ class UsuarioServiceTest {
     void deveLancarExcecaoQuandoDeleteIdInexistente(){
         //Arrange(Dado que...)
         Long id = 1L;
-        Mockito.when(repository.findById(id)).thenReturn(Optional.empty());
+        when(repository.findById(id)).thenReturn(Optional.empty());
         //Act e Assert (Quando e Entao)
         assertThatThrownBy(() -> service.deletarPorId(id))
             .isInstanceOf(EntityNotFoundException.class)
@@ -186,7 +186,7 @@ class UsuarioServiceTest {
         when(repository.save(novo)).thenReturn(any(Usuario.class));
 
         assertThatThrownBy(() -> service.editar(id, novoNome, novoEmail))
-            .isInstanceOf(userMismatchException.class)
+            .isInstanceOf(UserMismatchException.class)
             .hasMessage(ExceptionConstants.DADOS_NAO_COINCIDEM);
     }
 
@@ -229,8 +229,8 @@ class UsuarioServiceTest {
         when(repository.findById(id)).thenReturn(Optional.of(antigo));
         when(repository.save(novo)).thenReturn(any(Usuario.class));
 
-        assertThatThrownBy(() -> service.editar(id, novoNome, "johnjhon@email.com"))
-            .isInstanceOf(userMismatchException.class)
+        assertThatThrownBy(() -> service.editarNome(id, novoNome))
+            .isInstanceOf(UserMismatchException.class)
             .hasMessage(ExceptionConstants.DADOS_NAO_COINCIDEM);
     }
 
@@ -244,7 +244,7 @@ class UsuarioServiceTest {
         when(repository.findById(id)).thenReturn(Optional.of(existente));
         when(repository.save(alterado)).thenReturn(alterado);
 
-        UsuarioResponseDTO response = service.editar(id, "John", novoEmail);
+        UsuarioResponseDTO response = service.editarEmail(id,novoEmail);
 
         assertThat(response).isNotNull();
         assertThat(response.id()).isEqualTo(alterado.getId());
@@ -258,7 +258,7 @@ class UsuarioServiceTest {
         Long id = 1L;
         when(repository.findById(id)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> service.editar(id, null, null))
+        assertThatThrownBy(() -> service.editarEmail(id, null))
             .isInstanceOf(EntityNotFoundException.class)
             .hasMessage(ExceptionConstants.USUARIO_NAO_ENCONTRADO);
     }
@@ -273,8 +273,8 @@ class UsuarioServiceTest {
         when(repository.findById(id)).thenReturn(Optional.of(antigo));
         when(repository.save(novo)).thenReturn(any(Usuario.class));
 
-        assertThatThrownBy(() -> service.editar(id, "John", novoEmail))
-            .isInstanceOf(userMismatchException.class)
+        assertThatThrownBy(() -> service.editarEmail(id, novoEmail))
+            .isInstanceOf(UserMismatchException.class)
             .hasMessage(ExceptionConstants.DADOS_NAO_COINCIDEM);
     }
 }
