@@ -13,6 +13,8 @@ jobs:
     steps:
     - name: Checkout do código
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 #Pega o histórico de todos os commits
 
     - name: Configurar Java JDK 21
       uses: actions/setup-java@v4
@@ -21,5 +23,25 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Executar testes com o Maven
-      run: mvn test
+    - name: Cache do SonarCloud
+      uses: actions/cache@v4
+      with:
+        path: ~/.sonar/cache
+        key: ${{ runner.os }}-sonar
+        restore-keys: ${{ runner.os }}-sonar
+
+    - name: Executar testes JUnit e Análise SonarCloud com Maven
+      #Faz o mesmo que o mvn test, porém
+      # 
+      # - Após os testes, gera um relatorio de 
+      #   cobertura do código utilizado nos 
+      #   testes com JaCoCo
+      #
+      # - Aciona o plugin do SonarCloud e envia 
+      #   o código e o resultado dos testes para 
+      #   o Sonar
+
+      env: 
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} #É injetado, não precisa declarar
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run : mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
