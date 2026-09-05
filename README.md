@@ -76,3 +76,8 @@ Compartilho o progresso deste repositório no meu **Linkedin**, que você pode c
   <br/>
   <strong>João Vitor dos Santos</strong>
 </p>
+
+<br/>
+<p align="center">
+  <img src="https://sonarcloud.io/api/project_badges/quality_gate?project=JaumVituu_EstudoSpring"/>
+</p>
