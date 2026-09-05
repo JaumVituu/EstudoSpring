@@ -44,4 +44,4 @@ jobs:
       env: 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} #É injetado, não precisa declarar
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run : mvn -B -X verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+      run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.token=${{ secrets.SONAR_TOKEN }}
