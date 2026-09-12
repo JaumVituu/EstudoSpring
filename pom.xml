@@ -31,6 +31,13 @@
 		<sonar.organization>jaumvituu</sonar.organization>
     	<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.projectKey>JaumVituu_EstudoSpring</sonar.projectKey>
+		<sonar.coverage.exclusions>
+        **/dto/**,
+        **/model/**,
+        **/config/**,
+        **/exception/**,
+        **/*Application.java
+    </sonar.coverage.exclusions>
 	</properties>
 	<dependencies>
 		<dependency>
