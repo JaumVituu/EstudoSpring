@@ -37,10 +37,7 @@ public class UsuarioController {
 
     @ExceptionHandler(EntityExistsException.class)
     public ResponseEntity<String> handleEntityExists(EntityExistsException ex) {
-        if(ex.getMessage().equals(ExceptionConstants.EMAIL_JA_CADASTRADO)){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ExceptionConstants.EMAIL_JA_CADASTRADO);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(ExceptionConstants.DESCONHECIDO);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ExceptionConstants.EMAIL_JA_CADASTRADO);
     }
 
     @GetMapping()
