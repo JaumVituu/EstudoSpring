@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioRequestDTO;
 import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioResponseDTO;
+import dev.jhonjhonnys.estudos_spring.exception.usuario.consts.ExceptionConstants;
 import dev.jhonjhonnys.estudos_spring.model.Usuario;
 import dev.jhonjhonnys.estudos_spring.service.UsuarioService;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
@@ -28,9 +30,22 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<Usuario> criar(@RequestBody @Valid UsuarioRequestDTO request){
-        UsuarioResponseDTO dto = usuarioService.cadastrar(request);
-        Usuario salvo = new Usuario(dto.id(), dto.nome(), dto.email());
-        return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
+        try{
+            UsuarioResponseDTO dto = usuarioService.cadastrar(request);
+            Usuario salvo = new Usuario(dto.id(), dto.nome(), dto.email());
+            return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
+        }
+        catch(Exception e){
+            throw e;
+        }
+    }
+
+    @ExceptionHandler(EntityExistsException.class)
+    public ResponseEntity<String> handleEntityExists(EntityExistsException ex) {
+        if(ex.getMessage().equals(ExceptionConstants.EMAIL_JA_CADASTRADO)){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ExceptionConstants.EMAIL_JA_CADASTRADO);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(ExceptionConstants.DESCONHECIDO);
     }
 
     @GetMapping()

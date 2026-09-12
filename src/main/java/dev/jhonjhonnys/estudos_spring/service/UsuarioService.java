@@ -10,6 +10,7 @@ import dev.jhonjhonnys.estudos_spring.exception.usuario.UserMismatchException;
 import dev.jhonjhonnys.estudos_spring.exception.usuario.consts.ExceptionConstants;
 import dev.jhonjhonnys.estudos_spring.model.Usuario;
 import dev.jhonjhonnys.estudos_spring.repository.UsuarioRepository;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -22,7 +23,7 @@ public class UsuarioService {
 
     public UsuarioResponseDTO cadastrar(UsuarioRequestDTO dto){
         if (repository.existsByEmail(dto.email())){
-            throw new IllegalArgumentException(ExceptionConstants.EMAIL_JA_CADASTRADO);
+            throw new EntityExistsException(ExceptionConstants.EMAIL_JA_CADASTRADO);
         }
 
         Usuario novo = new Usuario(dto.nome(),dto.email());

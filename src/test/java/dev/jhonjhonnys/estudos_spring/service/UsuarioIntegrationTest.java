@@ -6,6 +6,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,7 +45,7 @@ class UsuarioIntegrationTest {
         entityManager.flush();
         UsuarioRequestDTO novo = new UsuarioRequestDTO("Jhonnys", "johnjhon@email.com");
         assertThatThrownBy(() -> service.cadastrar(novo))
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(EntityExistsException.class)
             .hasMessage(ExceptionConstants.EMAIL_JA_CADASTRADO);
     }
 }

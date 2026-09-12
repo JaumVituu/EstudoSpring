@@ -22,6 +22,7 @@ import dev.jhonjhonnys.estudos_spring.exception.usuario.UserMismatchException;
 import dev.jhonjhonnys.estudos_spring.exception.usuario.consts.ExceptionConstants;
 import dev.jhonjhonnys.estudos_spring.model.Usuario;
 import dev.jhonjhonnys.estudos_spring.repository.UsuarioRepository;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
@@ -78,7 +79,7 @@ class UsuarioServiceTest {
         
         //Assert (Entao...)
         assertThatThrownBy(() -> service.cadastrar(usuarioExistente))
-            .isInstanceOf(IllegalArgumentException.class)
+            .isInstanceOf(EntityExistsException.class)
             .hasMessage(ExceptionConstants.EMAIL_JA_CADASTRADO);
     }
 
