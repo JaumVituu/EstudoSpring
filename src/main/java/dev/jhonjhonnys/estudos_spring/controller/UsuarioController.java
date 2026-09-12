@@ -30,14 +30,9 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<Usuario> criar(@RequestBody @Valid UsuarioRequestDTO request){
-        try{
-            UsuarioResponseDTO dto = usuarioService.cadastrar(request);
-            Usuario salvo = new Usuario(dto.id(), dto.nome(), dto.email());
-            return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
-        }
-        catch(Exception e){
-            throw e;
-        }
+        UsuarioResponseDTO dto = usuarioService.cadastrar(request);
+        Usuario salvo = new Usuario(dto.id(), dto.nome(), dto.email());
+        return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
 
     @ExceptionHandler(EntityExistsException.class)
