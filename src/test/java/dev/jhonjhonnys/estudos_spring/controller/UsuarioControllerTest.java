@@ -1,5 +1,7 @@
 package dev.jhonjhonnys.estudos_spring.controller;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,6 +25,7 @@ import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioRequestDTO;
 import dev.jhonjhonnys.estudos_spring.dto.usuario.UsuarioResponseDTO;
 import dev.jhonjhonnys.estudos_spring.model.Usuario;
 import dev.jhonjhonnys.estudos_spring.service.UsuarioService;
+import jakarta.persistence.EntityNotFoundException;
 import tools.jackson.databind.ObjectMapper;
 
 // Testa camada Controller isoladamente do Model - View - Controller
@@ -82,5 +85,15 @@ class UsuarioControllerTest {
                 .andExpect(jsonPath("$.nome").value("John"))
                 .andExpect(jsonPath("$.email").value("johnjhon@email.com"));
         verify(usuarioService).buscarPorEmail(email);
+    }
+    
+    @Test 
+    @DisplayName("Deve lancar excecao ao buscar por um usuario nao existente")
+    void deveLancarExcecaoQuandoBuscaEmailInexistente() throws Exception{
+        String email = "johnjhon@email.com";
+        when(usuarioService.buscarPorEmail(email)).thenThrow(EntityNotFoundException.class);
+        mockMvc.perform(get("/usuarios?email="+email))
+            .andExpect(status().isNotFound())
+            .andExpect(result -> assertTrue(result.getResolvedException() instanceof EntityNotFoundException));
     }
 }
